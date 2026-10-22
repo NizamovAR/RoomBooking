@@ -1,0 +1,1 @@
+public record UpdateRoomRequest(string Name, int Capacity);
