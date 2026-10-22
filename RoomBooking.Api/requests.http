@@ -1,0 +1,15 @@
+GET http://localhost:5070/rooms
+
+###
+
+POST http://localhost:5070/rooms
+Content-Type: application/json
+
+{ "name": "Переговорка Б", "capacity": 8 }
+
+###
+
+POST http://localhost:5070/rooms
+Content-Type: application.json
+
+{ "name": "", "capacity": 0 }
