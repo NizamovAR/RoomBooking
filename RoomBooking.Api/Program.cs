@@ -1,29 +1,33 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddDbContext<AppDbContext> (options =>
+    options.UseNpgsql(builder.Configuration.GetConnectionString("Default")));
+
 var app = builder.Build();
 
-var rooms = new List<Room>
-{
-    new(1, "Переговорка А", 6),
-};
-var nextRoomId = 2;
-app.MapGet("/rooms", () => rooms);
+app.MapGet("/rooms", async (AppDbContext db) => 
+///AsNoTracking - для ускорения работы, просто чтение, без запоминания
+    await db.Rooms.AsNoTracking().ToListAsync());
 
-app.MapGet("/rooms/{id}", (int id) =>
+app.MapGet("/rooms/{id}", async (int id, AppDbContext db) =>
 {
-    var room = rooms.FirstOrDefault(r => r.Id == id);
+    var room = await db.Rooms.FindAsync(id);
     return room is null ? Results.NotFound() : Results.Ok(room);
 });
 
-app.MapPost("/rooms", (Room room) =>
+app.MapPost("/rooms", async (CreateRoomRequest request, AppDbContext db) =>
 {
-    if (string.IsNullOrWhiteSpace(room.Name) || room.Capacity <= 0)
-    {
-        return Results.BadRequest("Error");
-    }
+    if (string.IsNullOrWhiteSpace(request.Name)) return Results.BadRequest("Name is requered");
 
-    var created = room with { Id = nextRoomId++ };
-    rooms.Add(created);
-    return Results.Created($"/rooms/{created.Id}", created);
+    if (request.Capacity <= 0) return Results.BadRequest("Capacity must be positive");
+    var room = new Room { Name = request.Name, Capacity = request.Capacity};
+    db.Rooms.Add(room);
+    ///добавление собранных данных в базу
+    await db.SaveChangesAsync();
 
+    return Results.Created($"/rooms/{room.Id}", room);
 });
+
 app.Run();

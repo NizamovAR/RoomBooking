@@ -1,0 +1,1 @@
+public record CreateRoomRequest(string Name, int Capacity);
