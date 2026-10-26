@@ -1,15 +1,25 @@
-GET http://localhost:5070/rooms
+GET http://localhost:5070/rooms?page=1&pageSize=5
 
 ###
-
 POST http://localhost:5070/rooms
 Content-Type: application/json
 
 { "name": "Переговорка Б", "capacity": 8 }
 
 ###
-
 POST http://localhost:5070/rooms
-Content-Type: application.json
+Content-Type: application/json
 
-{ "name": "", "capacity": 0 }
+{ "name": "", "capacity": 5 }
+
+###
+PUT http://localhost:5070/rooms/1
+Content-Type: application/json
+
+{"name": "Переговорка В", "capacity": 5}
+
+###
+DELETE http://localhost:5070/rooms/2
+
+###
+DELETE http://localhost:5070/rooms/4
