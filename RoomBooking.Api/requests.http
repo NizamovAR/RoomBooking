@@ -1,3 +1,37 @@
+### Создание брони
+POST http://localhost:5070/reservations
+Content-Type: application/json
+
+{"roomId": 1, "userName": "Amir", "start": "2026-11-28T10:00:00Z", "end": "2026-11-28T11:00:00Z"}
+
+###Бронь со смещением
+POST http://localhost:5070/reservations
+Content-Type: application/json
+
+{"roomId": 1, "userName": "Amir", "start": "2026-11-29T10:00:00+03:00", "end": "2026-11-29T10:30:00+03:00"}
+
+###Конец брони раньше начала 
+POST http://localhost:5070/reservations
+Content-Type: application/json
+
+{"roomId": 1, "userName": "Amir", "start": "2026-11-28T10:00:00Z", "end": "2026-11-28T09:00:00Z"}
+
+###Отсутствие комнаты
+POST http://localhost:5070/reservations
+Content-Type: application/json
+
+{"roomId": 999, "userName": "Amir", "start": "2026-11-28T10:00:00Z", "end": "2026-11-28T11:00:00Z"}
+
+### Брони комнаты
+GET http://localhost:5070/reservations?roomId=1
+
+### Удалить комнату с бронями
+DELETE http://localhost:5070/rooms/1
+
+### Отменить бронь
+DELETE http://localhost:5070/reservations/2
+
+###
 GET http://localhost:5070/rooms?page=1&pageSize=5
 
 ###
