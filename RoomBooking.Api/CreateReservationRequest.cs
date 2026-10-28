@@ -1,0 +1,1 @@
+public record CreateReservationRequest(int RoomId, string UserName, DateTimeOffset Start, DateTimeOffset End);

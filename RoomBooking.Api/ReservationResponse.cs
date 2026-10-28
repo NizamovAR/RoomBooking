@@ -1,0 +1,1 @@
+public record ReservationResponse(int Id, int RoomId, string UserName, DateTime Start, DateTime End);

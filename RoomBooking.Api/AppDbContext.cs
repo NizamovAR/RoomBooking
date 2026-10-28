@@ -7,6 +7,7 @@ class AppDbContext : DbContext
     }
 
     public DbSet<Room> Rooms => Set<Room>();
+    public DbSet<Reservation> Reservations => Set<Reservation>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -15,6 +16,18 @@ class AppDbContext : DbContext
             entity.Property(r => r.Name)
                 .IsRequired()
                 .HasMaxLength(100);
+        });
+
+        modelBuilder.Entity<Reservation>(entity =>
+        {
+            entity.Property(r => r.UserName)
+            .IsRequired()
+            .HasMaxLength(100);
+
+            entity.HasOne(r => r.Room)
+                .WithMany(r => r.Reservations)
+                .HasForeignKey(r => r.RoomId)
+                .OnDelete(DeleteBehavior.Restrict);
         });
     }
 }
